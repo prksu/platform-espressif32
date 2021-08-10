@@ -44,6 +44,10 @@
       "description": "Pumbaa is Python on top of Simba. The implementation is a port of MicroPython, designed for embedded devices with limited amount of RAM and code memory",
       "homepage": "http://pumbaa.readthedocs.org/",
       "title": "Pumbaa"
+    },
+    "zephyr": {
+      "package": "framework-zephyr",
+      "script": "builder/frameworks/zephyr.py"
     }
   },
   "packages": {
@@ -51,7 +55,9 @@
       "type": "toolchain",
       "owner": "platformio",
       "version": "~2.50200.0",
-      "optionalVersions": ["~2.80400.0"]
+      "optionalVersions": [
+        "~2.80400.0"
+      ]
     },
     "toolchain-xtensa32s2": {
       "type": "toolchain",
@@ -94,7 +100,9 @@
       "optional": true,
       "owner": "platformio",
       "version": "~3.40300.0",
-      "optionalVersions": ["~3.40001.0"]
+      "optionalVersions": [
+        "~3.40001.0"
+      ]
     },
     "framework-simba": {
       "type": "framework",
@@ -107,6 +115,12 @@
       "optional": true,
       "owner": "platformio",
       "version": ">=2.3.0"
+    },
+    "framework-zephyr": {
+      "type": "framework",
+      "optional": true,
+      "owner": "platformio",
+      "version": "~2.20600.0"
     },
     "tool-esptoolpy": {
       "type": "uploader",
@@ -149,6 +163,14 @@
       "optional": true,
       "owner": "platformio",
       "version": "~1.0.1"
+    },
+    "tool-dtc": {
+      "optional": true,
+      "version": "~1.4.7"
+    },
+    "tool-gperf": {
+      "optional": true,
+      "version": "^3.0.0"
     }
   }
 }

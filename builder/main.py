@@ -206,6 +206,13 @@ if not env.get("PIOFRAMEWORK"):
 # Target: Build executable and linkable firmware or SPIFFS image
 #
 
+if "zephyr" in env.get("PIOFRAMEWORK", []):
+    env.SConscript(
+        join(platform.get_package_dir(
+            "framework-zephyr"), "scripts", "platformio", "platformio-build-pre.py"),
+        exports={"env": env}
+    )
+
 target_elf = None
 if "nobuild" in COMMAND_LINE_TARGETS:
     target_elf = join("$BUILD_DIR", "${PROGNAME}.elf")
@@ -226,7 +233,8 @@ else:
             join("$BUILD_DIR", "${PROGNAME}"), target_elf)
         env.Depends(target_firm, "checkprogsize")
 
-env.AddPlatformTarget("buildfs", target_firm, target_firm, "Build Filesystem Image")
+env.AddPlatformTarget("buildfs", target_firm,
+                      target_firm, "Build Filesystem Image")
 AlwaysBuild(env.Alias("nobuild", target_firm))
 target_buildprog = env.Alias("buildprog", target_firm, target_firm)
 
@@ -398,7 +406,8 @@ else:
     sys.stderr.write("Warning! Unknown upload protocol %s\n" % upload_protocol)
 
 env.AddPlatformTarget("upload", target_firm, upload_actions, "Upload")
-env.AddPlatformTarget("uploadfs", target_firm, upload_actions, "Upload Filesystem Image")
+env.AddPlatformTarget("uploadfs", target_firm,
+                      upload_actions, "Upload Filesystem Image")
 env.AddPlatformTarget(
     "uploadfsota", target_firm, upload_actions, "Upload Filesystem Image OTA")
 
@@ -410,7 +419,8 @@ env.AddPlatformTarget(
     "erase",
     None,
     [
-        env.VerboseAction(env.AutodetectUploadPort, "Looking for serial port..."),
+        env.VerboseAction(env.AutodetectUploadPort,
+                          "Looking for serial port..."),
         env.VerboseAction("$ERASECMD", "Erasing...")
     ],
     "Erase Flash",

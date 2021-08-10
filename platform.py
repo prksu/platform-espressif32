@@ -26,7 +26,8 @@ class Espressif32Platform(PlatformBase):
             return PlatformBase.configure_default_packages(self, variables, targets)
 
         board_config = self.board_config(variables.get("board"))
-        mcu = variables.get("board_build.mcu", board_config.get("build.mcu", "esp32"))
+        mcu = variables.get("board_build.mcu",
+                            board_config.get("build.mcu", "esp32"))
         frameworks = variables.get("pioframework", [])
         if "buildfs" in targets:
             self.packages["tool-mkspiffs"]["optional"] = False
@@ -44,6 +45,12 @@ class Espressif32Platform(PlatformBase):
             if "arduino" in frameworks:
                 # Arduino component is not compatible with ESP-IDF >=4.1
                 self.packages["framework-espidf"]["version"] = "~3.40001.0"
+        if "zephyr" in frameworks:
+            for p in ("tool-cmake", "tool-dtc", "tool-ninja"):
+                self.packages[p]["optional"] = False
+            if "windows" not in get_systype():
+                self.packages['tool-gperf']['optional'] = False
+            self.packages["toolchain-xtensa32"]["version"] = "~2.80400.0"
         if mcu in ("esp32s2", "esp32c3"):
             self.packages.pop("toolchain-xtensa32", None)
             self.packages.pop("toolchain-esp32ulp", None)
@@ -98,7 +105,8 @@ class Espressif32Platform(PlatformBase):
         ]
 
         upload_protocol = board.manifest.get("upload", {}).get("protocol")
-        upload_protocols = board.manifest.get("upload", {}).get("protocols", [])
+        upload_protocols = board.manifest.get(
+            "upload", {}).get("protocols", [])
         if debug:
             upload_protocols.extend(supported_debug_tools)
         if upload_protocol and upload_protocol not in upload_protocols:
@@ -207,7 +215,8 @@ class Espressif32Platform(PlatformBase):
 
         if "openocd" in debug_options["server"].get("executable", ""):
             debug_options["server"]["arguments"].extend(
-                ["-c", "adapter_khz %s" % (initial_debug_options.get("speed") or "5000")]
+                ["-c", "adapter_khz %s" %
+                    (initial_debug_options.get("speed") or "5000")]
             )
 
         ignore_conds = [
